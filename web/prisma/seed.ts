@@ -35,6 +35,35 @@ async function main() {
     console.log(`Inserted id: ${res.id}`);
   }
   
+  console.log('Setting up Playground Database Environment...');
+  try {
+    // 1. Create Role
+    await prisma.$executeRawUnsafe(`
+      DO $$ 
+      BEGIN
+        IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'playground_user') THEN
+          CREATE ROLE playground_user WITH LOGIN PASSWORD 'playground_pass';
+        END IF;
+      END $$;
+    `);
+
+    // 2. Create isolated schema
+    await prisma.$executeRawUnsafe(`CREATE SCHEMA IF NOT EXISTS sandbox_db;`);
+    await prisma.$executeRawUnsafe(`GRANT ALL ON SCHEMA sandbox_db TO playground_user;`);
+
+    // 3. Grant read-only access to main table
+    await prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO playground_user;`);
+    await prisma.$executeRawUnsafe(`GRANT SELECT ON public.table_kpi_marketing TO playground_user;`);
+
+    // 4. Revoke modifications on public schema
+    await prisma.$executeRawUnsafe(`REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON ALL TABLES IN SCHEMA public FROM playground_user;`);
+    await prisma.$executeRawUnsafe(`REVOKE CREATE ON SCHEMA public FROM playground_user;`);
+
+    console.log('Playground Environment Ready.');
+  } catch (error) {
+    console.error('Failed to setup playground environment:', error);
+  }
+
   console.log('Seeding finished.');
 }
 
