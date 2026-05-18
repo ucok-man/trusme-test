@@ -1,65 +1,73 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { ChartLineUp, Database, Code, ArrowRight } from '@phosphor-icons/react/dist/ssr';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="relative min-h-screen flex flex-col items-center justify-center p-6 overflow-hidden bg-background">
+      {/* Background glow effects untuk kesan premium dan futuristik */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center text-center space-y-8">
+        
+        {/* Badge Top */}
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm text-muted-foreground backdrop-blur-md animate-in fade-in slide-in-from-top-4 duration-700">
+          <Code weight="duotone" className="w-4 h-4 text-primary" />
+          <span>Technical Test Submission</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Hero Title */}
+        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white to-white/50 pb-4 animate-in fade-in zoom-in-95 duration-700 delay-150 fill-mode-both">
+          Trusmi Group
+          <br />
+          <span className="text-primary bg-clip-text bg-gradient-to-r from-primary to-blue-400">
+            Marketing Analytics
+          </span>
+        </h1>
+        
+        {/* Description */}
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-light animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-both">
+          Platform analitik terpadu. Dilengkapi dengan <strong className="text-foreground font-medium">Visualisasi Dashboard</strong> untuk performa KPI dan fitur <strong className="text-foreground font-medium">Interactive Playground</strong> untuk menguji raw query PostgreSQL.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl pt-12 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500 fill-mode-both">
+          
+          {/* Card 1: Dashboard (Soal 3 & 4) */}
+          <Link href="/dashboard" className="group relative p-[1px] rounded-2xl bg-gradient-to-b from-white/15 to-white/5 hover:from-primary/50 hover:to-primary/10 transition-all duration-500 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative h-full bg-background/80 backdrop-blur-xl p-8 rounded-2xl border border-white/5 flex flex-col items-start text-left transition-transform duration-500 group-hover:translate-y-[-2px]">
+              <div className="p-3 rounded-xl bg-primary/10 text-primary mb-6 ring-1 ring-primary/20 group-hover:bg-primary group-hover:text-primary-foreground group-hover:ring-primary/50 transition-all duration-500">
+                <ChartLineUp weight="duotone" className="w-8 h-8" />
+              </div>
+              <h2 className="text-2xl font-semibold text-foreground mb-3 flex items-center justify-between w-full">
+                KPI Dashboard
+                <ArrowRight weight="bold" className="w-5 h-5 text-primary opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500" />
+              </h2>
+              <p className="text-muted-foreground leading-relaxed">
+                Menjawab <strong>Soal 3 & 4</strong>. Visualisasi data pencapaian target dan analisis <em>Ontime/Late</em> menggunakan grafik interaktif yang indah dan responsif.
+              </p>
+            </div>
+          </Link>
+
+          {/* Card 2: Postgres Playground (Soal 1 & 2) */}
+          <Link href="/playground" className="group relative p-[1px] rounded-2xl bg-gradient-to-b from-white/15 to-white/5 hover:from-blue-500/50 hover:to-blue-500/10 transition-all duration-500 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative h-full bg-background/80 backdrop-blur-xl p-8 rounded-2xl border border-white/5 flex flex-col items-start text-left transition-transform duration-500 group-hover:translate-y-[-2px]">
+              <div className="p-3 rounded-xl bg-blue-500/10 text-blue-400 mb-6 ring-1 ring-blue-500/20 group-hover:bg-blue-500 group-hover:text-white group-hover:ring-blue-500/50 transition-all duration-500">
+                <Database weight="duotone" className="w-8 h-8" />
+              </div>
+              <h2 className="text-2xl font-semibold text-foreground mb-3 flex items-center justify-between w-full">
+                Postgres Playground
+                <ArrowRight weight="bold" className="w-5 h-5 text-blue-400 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500" />
+              </h2>
+              <p className="text-muted-foreground leading-relaxed">
+                Menjawab <strong>Soal 1 & 2</strong>. Ruang interaktif bagi reviewer untuk mengeksekusi <em>raw query</em> SQL buatan saya langsung ke database yang terisolasi.
+              </p>
+            </div>
+          </Link>
+          
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
