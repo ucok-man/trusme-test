@@ -1,0 +1,20 @@
+FROM oven/bun:1-alpine
+
+WORKDIR /app
+
+# Copy package management files
+COPY package.json bun.lock ./
+
+# Install dependencies using bun
+RUN bun install
+
+# Copy all files
+COPY . .
+
+# Generate Prisma Client if needed
+# RUN bunx prisma generate
+
+EXPOSE 3000
+
+# Jalankan Next.js dalam mode development
+CMD ["bun", "run", "dev"]

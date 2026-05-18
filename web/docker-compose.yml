@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: trusmi-web-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount direktori saat ini ke /app di container (Ini yang membuat Hot Reload bekerja)
+      - .:/app
+      # Sembunyikan node_modules lokal agar container murni menggunakan node_modules hasil bun install di dalam Docker
+      - /app/node_modules
+      # Sembunyikan folder build Next.js lokal
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      # Memastikan Next.js merespon perubahan file secara instan walau berjalan di dalam Docker (Polling)
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+      # Membuka akses server ke 0.0.0.0 (Wajib untuk Docker)
+      - HOSTNAME=0.0.0.0
+      # Koneksi database yang mengarah ke container 'db'
+      - DATABASE_URL=postgresql://postgres:trusmi_password@db:5432/trusmi_db?schema=public
+    depends_on:
+      - db
+    # Jika menggunakan WSL atau Linux kadang diperlukan perintah ini agar bun dapat mengakses host tanpa kendala
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+
+  db:
+    image: postgres:15-alpine
+    container_name: trusmi-db-dev
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: trusmi_password
+      POSTGRES_DB: trusmi_db
+    volumes:
+      # Volume terpisah untuk memastikan data PostgreSQL tidak hilang walau container direstart
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
