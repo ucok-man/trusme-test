@@ -1,6 +1,6 @@
 # Jawaban Soal 5: Normalisasi Tabel `table_kpi_marketing`
 
-Kalau kita perhatikan struktur awal dari `table_kpi_marketing`, bentuknya masih berupa *flat table* (semua data digabung jadi satu kolom demi kolom). Untuk data yang sifatnya *dump* atau laporan sementara, ini sih sebenernya nggak masalah. Tapi kalau ini dipakai untuk *core database* aplikasi skala besar, struktur begini rawan banget bikin masalah di kemudian hari.
+Kalau kita perhatikan struktur awal dari `table_kpi_marketing`, bentuknya masih berupa *flat table* (semua data digabung jadi satu kolom demi kolom). Untuk aplikasi skala besar, struktur ini rawan bikin masalah di kemudian hari.
 
 ### Kenapa tabel ini harus dinormalisasi?
 1. **Data Redundan (Berulang):** Nama karyawan seperti "Budi" dan jenis KPI seperti "Sales" dan "Report" ditulis berulang kali di setiap baris tugas. Ini bikin berat *storage* dan bikin proses *indexing* di database jadi kurang efisien.
