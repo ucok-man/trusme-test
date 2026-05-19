@@ -7,16 +7,12 @@ Kalau kita perhatikan struktur awal dari `table_kpi_marketing`, bentuknya masih 
 2. **Rawan *Typo* / Inkonsistensi:** Karena kolom `karyawan` dan `kpi` cuma teks biasa (*varchar*), admin bisa saja salah input (misal nulis "budi", "Budy", atau "Budi S."). Nanti pas kita mau nge-Group atau Pivot datanya buat bikin laporan, hasilnya bakal berantakan karena beda 1 huruf aja dihitung sebagai orang yang beda.
 3. **Susah Di-*maintain*:** Di soal disebutkan kalau masing-masing KPI bobotnya 50%. Di tabel awal, informasi *bobot* ini nggak ada tempatnya (jadi harus di-*hardcode* di dalam *source code* aplikasi). Bayangin kalau besok manajemen minta bobot "Sales" naik jadi 70%, kita bakal repot harus ngedit *code*.
 
----
-
 ### Step Normalisasi (Pendekatan)
 
 Menurut saya, biar lebih solid dan masuk ke standar minimal 3NF (Third Normal Form), kita perlu memecah tabel raksasa ini menjadi 3 tabel terpisah yang saling berelasi:
 1. **Tabel Master Karyawan:** Khusus nyimpen data identitas orangnya.
 2. **Tabel Master KPI:** Khusus nyimpen jenis KPI dan aturan bobotnya.
 3. **Tabel Transaksi (Tasks):** Cuma nyimpen log daftar tugas dan me-relasikan id karyawan dengan id kpi.
-
----
 
 ### Desain Database Baru (Hasil Normalisasi)
 
@@ -72,8 +68,6 @@ CREATE TABLE `transaksi_task` (
 |---|---|---|---|---|---|
 | 1 | 1 | 1 | Tasklist 1 | 2022-01-10 | 2022-01-09 |
 | 2 | 1 | 1 | Tasklist 2 | 2022-01-10 | 2022-01-08 |
-
----
 
 ### Kesimpulan & Benefit
 Dengan memecahnya pakai sistem relasi (*Foreign Key*) seperti di atas:
