@@ -52,20 +52,22 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy Prisma schema, config, and start script for production auto-migration
+# --- Isolated Migration Environment ---
+# We setup Prisma in a completely separate directory so it gets a 100% fresh
+# node_modules installation without conflicts.
+WORKDIR /migration
+RUN bun add prisma@7.8.0
+
+# Return to app directory
+WORKDIR /app
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
 COPY --chown=nextjs:nodejs start.sh ./
 RUN chmod +x start.sh
 
-# Copy full Prisma modules from builder to ensure CLI and 'prisma/config' work at runtime
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/prisma ./node_modules/prisma
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
-
 USER nextjs
 
 EXPOSE 3000
-
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
