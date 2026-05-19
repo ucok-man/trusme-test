@@ -52,6 +52,12 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Copy Prisma schema, seed script, and config for production auto-migration
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
+COPY --chown=nextjs:nodejs start.sh ./
+RUN chmod +x start.sh
+
 USER nextjs
 
 EXPOSE 3000
@@ -59,5 +65,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# server.js is created by next build from the standalone output
-CMD ["bun", "run", "server.js"]
+# Auto-migrate database before starting the server
+CMD ["./start.sh"]
