@@ -2,8 +2,8 @@
 set -e
 
 echo "Menyiapkan Database Production..."
-# Gunakan prisma CLI dari folder isolasi /migration
-/migration/node_modules/.bin/prisma db push --accept-data-loss
+# Push schema tanpa interaksi
+bunx prisma db push --accept-data-loss
 
 echo "Menjalankan Seeding & Setup Role..."
 # Menjalankan script seed.ts langsung menggunakan bun

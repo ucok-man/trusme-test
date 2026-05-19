@@ -52,14 +52,12 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# --- Isolated Migration Environment ---
-# We setup Prisma in a completely separate directory so it gets a 100% fresh
-# node_modules installation without conflicts.
-WORKDIR /migration
-RUN bun add prisma@7.8.0
+# Fix Prisma 7 Standalone issue:
+# Next.js standalone strips out 'effect' and other CLI dependencies.
+# We must reinstall Prisma and effect directly into the standalone node_modules
+# so that prisma.config.ts can resolve them properly.
+RUN bun add prisma@7.8.0 effect
 
-# Return to app directory
-WORKDIR /app
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
 COPY --chown=nextjs:nodejs start.sh ./
