@@ -3,10 +3,8 @@ FROM oven/bun:1-alpine AS base
 # Install dependencies only when needed
 FROM base AS deps
 WORKDIR /app
-
 # Install dependencies required for Prisma
 RUN apk add --no-cache openssl
-
 # Install node_modules
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
@@ -14,9 +12,7 @@ RUN bun install --frozen-lockfile
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
-
 RUN apk add --no-cache openssl
-
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -31,7 +27,6 @@ RUN bun run build
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
-
 RUN apk add --no-cache openssl
 
 ENV NODE_ENV=production
@@ -40,26 +35,13 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
+# Copy all necessary files for a standard Next.js production build (non-standalone)
 COPY --from=builder /app/public ./public
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Copy the standalone output and static files
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-# Fix Prisma 7 Standalone issue:
-# Next.js standalone strips out 'effect' and other CLI dependencies.
-# We must reinstall Prisma and effect directly into the standalone node_modules
-# so that prisma.config.ts can resolve them properly.
-RUN bun add prisma@7.8.0 effect
-
-COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
-COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./
 COPY --chown=nextjs:nodejs start.sh ./
 RUN chmod +x start.sh
 

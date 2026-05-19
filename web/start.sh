@@ -10,5 +10,5 @@ echo "Menjalankan Seeding & Setup Role..."
 bun prisma/seed.ts
 
 echo "Memulai Server Aplikasi..."
-# Jalankan Next.js server hasil build standalone
-exec bun run server.js
+# Jalankan Next.js server mode standard
+exec bun run start
