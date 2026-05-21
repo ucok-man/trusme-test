@@ -2,6 +2,8 @@
 
 Sebuah aplikasi berbasis **Next.js (App Router)** yang berfungsi ganda sebagai **Marketing Analytics Dashboard** dan **Secure SQL Playground**. Dibangun dengan arsitektur modern menggunakan Prisma ORM, PostgreSQL, dan Docker untuk lingkungan pengembangan yang mulus.
 
+Live Demo: [https://trusmi.ucokman.web.id](https://trusmi.ucokman.web.id)
+
 ## 🚀 Fitur Utama
 
 ### 1. Marketing Analytics Dashboard
